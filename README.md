@@ -28,100 +28,6 @@ npm install
 npm run build
 ```
 
-## Using with npx
-
-Once the package is published to npm by the maintainer, you can run the MCP Magic UI server directly using npx without installing it locally:
-
-```bash
-# Run with default settings
-npx mcp-magic-ui
-
-# Run with custom configuration
-npx mcp-magic-ui --config "{\"githubToken\": \"your_token_here\", \"cachePath\": \"/custom/cache/path\"}"
-```
-
-### How npx Works
-
-When you run `npx mcp-magic-ui` without having the package installed locally:
-
-1. npx will search for the package in the npm registry (npmjs.com)
-2. It will temporarily download the latest version of the package
-3. The package will be executed directly from the npm cache
-4. After execution, the temporary files are cleaned up automatically
-
-The `-y` flag (e.g., `npx -y mcp-magic-ui`) automatically answers "yes" to any prompts, which is useful for running in scripts or with AI assistants.
-
-> **Note:** This requires the package to be published to the npm registry by the maintainer.
-
-### Using Locally (Without npm Publication)
-
-Until the package is published to npm, you can use it locally with these methods:
-
-1. **Use the local path with npx**:
-   ```bash
-   npx /path/to/mcp-magic-ui
-   ```
-
-2. **Install globally from local directory**:
-   ```bash
-   # From the project directory
-   npm install -g .
-   
-   # Then you can run it from anywhere
-   mcp-magic-ui
-   ```
-
-3. **Use with Claude Desktop directly**:
-   ```json
-   {
-     "mcpServers": {
-       "magic-ui": {
-         "command": "/absolute/path/to/mcp-magic-ui/dist/cli.js"
-       }
-     }
-   }
-   ```
-
-### Configuration Options
-
-The `--config` parameter accepts a JSON string with the following options:
-
-- **githubToken**: GitHub personal access token for API access (overrides GITHUB_TOKEN env var)
-- **cachePath**: Custom path for storing cache files (default: ./cache)
-
-### Using with Claude Desktop
-
-To use with Claude Desktop (once published):
-
-```json
-{
-  "mcpServers": {
-    "magic-ui": {
-      "command": "npx",
-      "args": ["-y", "mcp-magic-ui"]
-    }
-  }
-}
-```
-
-With custom configuration:
-
-```json
-{
-  "mcpServers": {
-    "magic-ui": {
-      "command": "npx",
-      "args": [
-        "-y", 
-        "mcp-magic-ui", 
-        "--config", 
-        "{\"githubToken\": \"your_token_here\", \"cachePath\": \"/custom/cache/path\"}"
-      ]
-    }
-  }
-}
-```
-
 ## Configuration
 
 To avoid GitHub API rate limits, it's recommended to set up a GitHub personal access token:
@@ -133,8 +39,6 @@ To avoid GitHub API rate limits, it's recommended to set up a GitHub personal ac
 ```
 GITHUB_TOKEN=your_github_token_here
 ```
-
-Alternatively, you can provide the token directly in the configuration as shown above.
 
 ## Usage
 
