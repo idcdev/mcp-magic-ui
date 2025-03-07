@@ -40,6 +40,19 @@ npx mcp-magic-ui
 npx mcp-magic-ui --config "{\"githubToken\": \"your_token_here\", \"cachePath\": \"/custom/cache/path\"}"
 ```
 
+### How npx Works
+
+When you run `npx mcp-magic-ui` without having the package installed locally:
+
+1. npx will search for the package in the npm registry (npmjs.com)
+2. It will temporarily download the latest version of the package
+3. The package will be executed directly from the npm cache
+4. After execution, the temporary files are cleaned up automatically
+
+The `-y` flag (e.g., `npx -y mcp-magic-ui`) automatically answers "yes" to any prompts, which is useful for running in scripts or with AI assistants.
+
+> **Note:** For this to work, the package must be published to the npm registry. If you're developing locally, you'll need to publish your package first or use the local installation method.
+
 ### Configuration Options
 
 The `--config` parameter accepts a JSON string with the following options:
