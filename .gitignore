@@ -13,3 +13,7 @@ Thumbs.db
 
 # Cache files
 cache/
+
+# Log files
+server.log
+*.log
