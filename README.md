@@ -30,7 +30,7 @@ npm run build
 
 ## Using with npx
 
-You can run the MCP Magic UI server directly using npx without installing it locally:
+Once the package is published to npm by the maintainer, you can run the MCP Magic UI server directly using npx without installing it locally:
 
 ```bash
 # Run with default settings
@@ -51,23 +51,11 @@ When you run `npx mcp-magic-ui` without having the package installed locally:
 
 The `-y` flag (e.g., `npx -y mcp-magic-ui`) automatically answers "yes" to any prompts, which is useful for running in scripts or with AI assistants.
 
-> **Note:** For this to work, the package must be published to the npm registry. If you're developing locally, you'll need to publish your package first or use the local installation method.
+> **Note:** This requires the package to be published to the npm registry by the maintainer.
 
-### Publishing to npm
+### Using Locally (Without npm Publication)
 
-Before you can use the package with npx, you need to publish it to the npm registry:
-
-```bash
-# Login to npm (you'll need an npm account)
-npm login
-
-# Publish the package
-npm publish
-```
-
-### Alternatives for Local Development
-
-If you haven't published the package yet, you have several options:
+Until the package is published to npm, you can use it locally with these methods:
 
 1. **Use the local path with npx**:
    ```bash
@@ -83,7 +71,7 @@ If you haven't published the package yet, you have several options:
    mcp-magic-ui
    ```
 
-3. **Use with Claude Desktop without publishing**:
+3. **Use with Claude Desktop directly**:
    ```json
    {
      "mcpServers": {
@@ -103,7 +91,7 @@ The `--config` parameter accepts a JSON string with the following options:
 
 ### Using with Claude Desktop
 
-To use with Claude Desktop, add the following to your `claude_desktop_config.json`:
+To use with Claude Desktop (once published):
 
 ```json
 {
