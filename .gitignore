@@ -10,3 +10,6 @@ dist/
 # OS specific
 .DS_Store
 Thumbs.db
+
+# Cache files
+cache/
