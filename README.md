@@ -68,17 +68,12 @@ Or, if using HTTP transport:
 npx @modelcontextprotocol/inspector http://localhost:3000
 ```
 
-## Available Tools and Resources
+## Available Tools
 
-### Tools
+The server provides the following MCP tools:
 
 - `get_all_components` - Get a list of all available Magic UI components with their metadata
 - `get_component_by_path` - Get the source code of a specific component by its file path
-
-### Resources
-
-- `component://` - List all available components (planned for future implementation)
-- `component://{name}` - Get details about a specific component (planned for future implementation)
 
 ## Project Structure
 
