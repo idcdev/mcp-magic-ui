@@ -7,9 +7,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Path to cache file
-const CACHE_DIR = path.join(__dirname, '../../cache');
-const REGISTRY_CACHE_FILE = path.join(CACHE_DIR, 'registry.json');
+// Default cache expiry time
 const CACHE_EXPIRY_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 export interface RegistryComponent {
@@ -35,33 +33,40 @@ export class GitHubService {
   private retryDelay = 1000; // ms
   private maxRetries = 3;
   private rawRegistryData: any[] = []; // Store raw content of registry.json
+  private cachePath: string;
+  private registryPath: string;
 
-  constructor(token?: string) {
-    // Use token from environment if not provided
-    const authToken = token || process.env.GITHUB_TOKEN;
-    this.octokit = new Octokit({ 
-      auth: authToken,
+  constructor(customCachePath?: string) {
+    // Inicializar o cliente Octokit com o token do GitHub, se disponível
+    this.octokit = new Octokit({
+      auth: process.env.GITHUB_TOKEN,
       request: {
         retries: this.maxRetries,
         retryAfter: this.retryDelay
       }
     });
     
-    if (!authToken) {
+    if (!process.env.GITHUB_TOKEN) {
       console.warn('GitHub token not provided. API rate limits will be restricted.');
       console.warn('Create a token at https://github.com/settings/tokens and set it as GITHUB_TOKEN in .env file.');
     }
     
-    // Create cache directory if it doesn't exist
+    // Definir o caminho do cache
+    this.cachePath = customCachePath || path.join(process.cwd(), 'cache');
+    
+    // Criar o diretório de cache se não existir
     this.ensureCacheDirectory();
+    
+    // Definir o caminho do arquivo de registro
+    this.registryPath = path.join(this.cachePath, 'registry.json');
   }
   
   // Ensure cache directory exists
   private ensureCacheDirectory(): void {
     try {
-      if (!fs.existsSync(CACHE_DIR)) {
-        fs.mkdirSync(CACHE_DIR, { recursive: true });
-        console.error(`Cache directory created at ${CACHE_DIR}`);
+      if (!fs.existsSync(this.cachePath)) {
+        fs.mkdirSync(this.cachePath, { recursive: true });
+        console.error(`Cache directory created at ${this.cachePath}`);
       }
     } catch (error) {
       console.error('Error creating cache directory:', error);
@@ -71,11 +76,11 @@ export class GitHubService {
   // Check if cache is valid (not expired)
   private isCacheValid(): boolean {
     try {
-      if (!fs.existsSync(REGISTRY_CACHE_FILE)) {
+      if (!fs.existsSync(this.registryPath)) {
         return false;
       }
       
-      const stats = fs.statSync(REGISTRY_CACHE_FILE);
+      const stats = fs.statSync(this.registryPath);
       const cacheAge = Date.now() - stats.mtimeMs;
       
       return cacheAge < CACHE_EXPIRY_MS;
@@ -88,8 +93,8 @@ export class GitHubService {
   // Save data to cache
   private saveToCache(data: string): void {
     try {
-      fs.writeFileSync(REGISTRY_CACHE_FILE, data);
-      console.error(`Registry data cached to ${REGISTRY_CACHE_FILE}`);
+      fs.writeFileSync(this.registryPath, data);
+      console.error(`Registry data cached to ${this.registryPath}`);
     } catch (error) {
       console.error('Error saving to cache:', error);
     }
@@ -100,7 +105,7 @@ export class GitHubService {
     try {
       if (this.isCacheValid()) {
         console.error('Loading registry from cache');
-        return fs.readFileSync(REGISTRY_CACHE_FILE, 'utf-8');
+        return fs.readFileSync(this.registryPath, 'utf-8');
       }
       return null;
     } catch (error) {
@@ -245,50 +250,40 @@ export class GitHubService {
   private loadMockRegistryData() {
     const mockComponents: RegistryComponent[] = [
       {
-        name: 'animated-beam',
-        type: 'registry:ui',
-        title: 'Animated Beam',
-        description: 'An animated beam of light which travels along a path. Useful for showcasing the "integration" features of a website.',
-        dependencies: ['motion'],
+        name: 'accordion',
+        type: 'component',
+        title: 'Accordion',
+        description: 'A vertically stacked set of interactive headings that each reveal a section of content.',
         files: [
           {
-            path: 'registry/magicui/animated-beam.tsx',
-            type: 'registry:ui',
-            target: 'components/magicui/animated-beam.tsx'
+            path: 'components/accordion/accordion.tsx',
+            type: 'component',
+            target: 'accordion.tsx'
           }
         ]
       },
       {
-        name: 'border-beam',
-        type: 'registry:ui',
-        title: 'Border Beam',
-        description: 'An animated beam of light which travels along the border of its container.',
+        name: 'alert',
+        type: 'component',
+        title: 'Alert',
+        description: 'Displays a callout for user attention.',
         files: [
           {
-            path: 'registry/magicui/border-beam.tsx',
-            type: 'registry:ui',
-            target: 'components/magicui/border-beam.tsx'
-          }
-        ]
-      },
-      {
-        name: 'shimmer-button',
-        type: 'registry:ui',
-        title: 'Shimmer Button',
-        description: 'A button with a shimmer effect that moves across the button.',
-        files: [
-          {
-            path: 'registry/magicui/shimmer-button.tsx',
-            type: 'registry:ui',
-            target: 'components/magicui/shimmer-button.tsx'
+            path: 'components/alert/alert.tsx',
+            type: 'component',
+            target: 'alert.tsx'
           }
         ]
       }
     ];
     
-    mockComponents.forEach(component => {
+    // Add mock components to registry
+    for (const component of mockComponents) {
       this.registryComponents.set(component.name, component);
-    });
+    }
+    
+    // Set raw data
+    this.rawRegistryData = mockComponents;
     
     console.error(`Loaded ${this.registryComponents.size} mock components`);
   }

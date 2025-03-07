@@ -3,9 +3,21 @@ import { z } from "zod";
 import { GitHubService } from "./services/github.js";
 import { ComponentParser } from "./services/component-parser.js";
 
-export async function createServer() {
+// Interface para configuração
+interface ServerConfig {
+  githubToken?: string;
+  cachePath?: string;
+  [key: string]: any;
+}
+
+export async function createServer(config: ServerConfig = {}) {
+  // Apply configuration
+  if (config.githubToken) {
+    process.env.GITHUB_TOKEN = config.githubToken;
+  }
+  
   // Initialize services
-  const githubService = new GitHubService();
+  const githubService = new GitHubService(config.cachePath);
   const componentParser = new ComponentParser(githubService);
   
   // Load all components

@@ -28,6 +28,31 @@ npm install
 npm run build
 ```
 
+## Using with npx
+
+You can run the MCP Magic UI server directly using npx without installing it locally:
+
+```bash
+# Run with default settings
+npx mcp-magic-ui
+
+# Run with custom configuration
+npx mcp-magic-ui --config "{\"option\": \"value\"}"
+```
+
+To use with Claude Desktop, add the following to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "magic-ui": {
+      "command": "npx",
+      "args": ["-y", "mcp-magic-ui"]
+    }
+  }
+}
+```
+
 ## Configuration
 
 To avoid GitHub API rate limits, it's recommended to set up a GitHub personal access token:
