@@ -53,6 +53,47 @@ The `-y` flag (e.g., `npx -y mcp-magic-ui`) automatically answers "yes" to any p
 
 > **Note:** For this to work, the package must be published to the npm registry. If you're developing locally, you'll need to publish your package first or use the local installation method.
 
+### Publishing to npm
+
+Before you can use the package with npx, you need to publish it to the npm registry:
+
+```bash
+# Login to npm (you'll need an npm account)
+npm login
+
+# Publish the package
+npm publish
+```
+
+### Alternatives for Local Development
+
+If you haven't published the package yet, you have several options:
+
+1. **Use the local path with npx**:
+   ```bash
+   npx /path/to/mcp-magic-ui
+   ```
+
+2. **Install globally from local directory**:
+   ```bash
+   # From the project directory
+   npm install -g .
+   
+   # Then you can run it from anywhere
+   mcp-magic-ui
+   ```
+
+3. **Use with Claude Desktop without publishing**:
+   ```json
+   {
+     "mcpServers": {
+       "magic-ui": {
+         "command": "/absolute/path/to/mcp-magic-ui/dist/cli.js"
+       }
+     }
+   }
+   ```
+
 ### Configuration Options
 
 The `--config` parameter accepts a JSON string with the following options:
