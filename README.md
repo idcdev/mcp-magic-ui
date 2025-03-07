@@ -37,8 +37,17 @@ You can run the MCP Magic UI server directly using npx without installing it loc
 npx mcp-magic-ui
 
 # Run with custom configuration
-npx mcp-magic-ui --config "{\"option\": \"value\"}"
+npx mcp-magic-ui --config "{\"githubToken\": \"your_token_here\", \"cachePath\": \"/custom/cache/path\"}"
 ```
+
+### Configuration Options
+
+The `--config` parameter accepts a JSON string with the following options:
+
+- **githubToken**: GitHub personal access token for API access (overrides GITHUB_TOKEN env var)
+- **cachePath**: Custom path for storing cache files (default: ./cache)
+
+### Using with Claude Desktop
 
 To use with Claude Desktop, add the following to your `claude_desktop_config.json`:
 
@@ -48,6 +57,24 @@ To use with Claude Desktop, add the following to your `claude_desktop_config.jso
     "magic-ui": {
       "command": "npx",
       "args": ["-y", "mcp-magic-ui"]
+    }
+  }
+}
+```
+
+With custom configuration:
+
+```json
+{
+  "mcpServers": {
+    "magic-ui": {
+      "command": "npx",
+      "args": [
+        "-y", 
+        "mcp-magic-ui", 
+        "--config", 
+        "{\"githubToken\": \"your_token_here\", \"cachePath\": \"/custom/cache/path\"}"
+      ]
     }
   }
 }
@@ -64,6 +91,8 @@ To avoid GitHub API rate limits, it's recommended to set up a GitHub personal ac
 ```
 GITHUB_TOKEN=your_github_token_here
 ```
+
+Alternatively, you can provide the token directly in the configuration as shown above.
 
 ## Usage
 

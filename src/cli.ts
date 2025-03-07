@@ -39,7 +39,9 @@ function parseArgs() {
 Usage: mcp-magic-ui [options]
 
 Options:
-  --config JSON    Provide configuration as a JSON string
+  --config JSON    Provide configuration as a JSON string with the following options:
+                   - githubToken: GitHub personal access token (overrides GITHUB_TOKEN env var)
+                   - cachePath: Custom path for storing cache files (default: ./cache)
   --help, -h       Show this help message
       `);
       process.exit(0);
